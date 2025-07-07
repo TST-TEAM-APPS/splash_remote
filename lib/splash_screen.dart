@@ -90,7 +90,7 @@ class _SplashScreenState extends State<SplashScreen> with ConfigMixin {
   void _navigateToMainScreen() async {
     final prefs = await SharedPreferences.getInstance(); //TODO переделать под вашу конфигурацию
     final onBoardingIsComplete =
-        prefs.getBool('first_run') ?? true;
+        prefs.getBool('first_run') ?? false;
     if (onBoardingIsComplete) {
       Navigator.of(context).pushReplacement(
         CupertinoPageRoute(
