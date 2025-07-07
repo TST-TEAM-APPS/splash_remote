@@ -9,7 +9,23 @@ final prefs = await SharedPreferences.getInstance(); //TODO переделать
 
 ### SPLASH VIEW
 ```dart
-void _navigateToMainScreen() {
+  void _navigateToMainScreen() async {
+  final prefs = await SharedPreferences.getInstance(); //TODO переделать под вашу конфигурацию
+  final onBoardingIsComplete =
+      prefs.getBool('first_run') ?? true;
+  if (onBoardingIsComplete) {
+    Navigator.of(context).pushReplacement(
+      CupertinoPageRoute(
+        builder: (context) => MainScreen(),
+      ),
+    );
+  } else {
+    Navigator.of(context).pushReplacement(
+      CupertinoPageRoute(
+        builder: (context) => OnboardingScreen(),
+      ),
+    );
+  }
   if (mounted) {
     Navigator.pushReplacementNamed(context, '/main'); //TODO ваша реализация
   }

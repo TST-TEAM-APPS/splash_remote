@@ -1,7 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:splash_navigator/feature_data.dart';
+import 'package:splash_navigator/main.dart';
+import 'package:splash_navigator/onboarding_screen.dart';
 import 'package:splash_navigator/preferences_service.dart';
 import 'feature_mixin.dart';
 
@@ -76,6 +79,7 @@ class _SplashScreenState extends State<SplashScreen> with ConfigMixin {
       if (response.statusCode == 200) {
         _navigateToFeatureView();
       } else {
+
         _navigateToMainScreen();
       }
     } catch (e) {
@@ -83,7 +87,23 @@ class _SplashScreenState extends State<SplashScreen> with ConfigMixin {
     }
   }
 
-  void _navigateToMainScreen() {
+  void _navigateToMainScreen() async {
+    final prefs = await SharedPreferences.getInstance(); //TODO переделать под вашу конфигурацию
+    final onBoardingIsComplete =
+        prefs.getBool('first_run') ?? true;
+    if (onBoardingIsComplete) {
+      Navigator.of(context).pushReplacement(
+        CupertinoPageRoute(
+          builder: (context) => MainScreen(),
+        ),
+      );
+    } else {
+      Navigator.of(context).pushReplacement(
+        CupertinoPageRoute(
+          builder: (context) => OnboardingScreen(),
+        ),
+      );
+    }
     if (mounted) {
       Navigator.pushReplacementNamed(context, '/main'); //TODO ваша реализация
     }
