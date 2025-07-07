@@ -49,9 +49,8 @@ class _FeatureViewState extends State<FeatureView> with ConfigMixin {
           onProgress: (int progress) {},
           onPageStarted: (String url) {},
           onPageFinished: (String url) async {
-            print(url);
             if (url == targetData) {
-              final prefs = await SharedPreferences.getInstance();
+              final prefs = await SharedPreferences.getInstance(); //TODO переделать под вашу конфигурацию
               final onBoardingIsComplete =
                   prefs.getBool('first_run') ?? true;
               if (onBoardingIsComplete) {

@@ -59,7 +59,6 @@ class MainScreen extends StatelessWidget {
             const SizedBox(height: 40),
             ElevatedButton(
               onPressed: () {
-                // Дополнительные действия
               },
               child: Text('Дополнительные действия'),
             ),

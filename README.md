@@ -38,14 +38,12 @@ graph TD
     D --> F{Прошло >= N дней?}
     E --> F
     F -->|Нет| G[Переход на MainScreen]
-    F -->|Да| H{Функция включена?}
-    H -->|Нет| G
-    H -->|Да| I[HTTP-запрос по ссылке]
-    I --> J{Статус код 200?}
-    J -->|Да| K[Сохранить URL + переход на FeatureView]
-    J -->|Нет| G
-    I --> L{Таймаут/Ошибка?}
-    L -->|Да| G
+    F -->|Да| H[HTTP-запрос по ссылке]
+    H --> I{Статус код 200?}
+    I -->|Да| J[Сохранить URL + переход на FeatureView]
+    I -->|Нет| G
+    H --> K{Таймаут/Ошибка?}
+    K -->|Да| G
 ```
 
 ### Временная логика
@@ -80,12 +78,9 @@ class ConfigManager {
 
   // 🔗 НАСТРОЙКА ССЫЛКИ
   String get configData => 'https://your-api-endpoint.com/check';
-  
+
   // ⏰ НАСТРОЙКА КОЛИЧЕСТВА ДНЕЙ
   int get waitingDays => 7;
-  
-  // 🔧 ВКЛЮЧЕНИЕ/ОТКЛЮЧЕНИЕ ФУНКЦИИ
-  bool get isDisabled => false;
 }
 ```
 
@@ -135,12 +130,9 @@ class MyApp extends StatelessWidget {
 class ConfigManager {
   // 🔗 Изменить ссылку для HTTP-запроса
   String get configData => 'https://your-domain.com/api/check';
-  
+
   // ⏰ Изменить количество дней ожидания
   int get waitingDays => 3; // Например, 3 дня вместо 7
-  
-  // 🔧 Отключить функцию (всегда переход на MainScreen)
-  bool get isDisabled => true;
 }
 ```
 
@@ -149,8 +141,8 @@ class ConfigManager {
 ```dart
 // splash_screen.dart - метод _checkFeatureAvailability()
 final response = await http.get(
-  Uri.parse(link),
-  headers: {'Content-Type': 'application/json'},
+Uri.parse(link),
+headers: {'Content-Type': 'application/json'},
 ).timeout(const Duration(seconds: 15)); // 🕐 Изменить таймаут
 ```
 
@@ -167,7 +159,7 @@ final response = await http.get(Uri.parse(link));
 
 // Сохранение для FeatureView
 if (response.statusCode == 200) {
-  saveLastVisitedUrl(link); // Сохраняется в SharedPreferences
+saveLastVisitedUrl(link); // Сохраняется в SharedPreferences
 }
 ```
 
@@ -180,7 +172,7 @@ int get days => ConfigManager.instance.waitingDays;
 // Проверка временного интервала
 bool get isTimeEnabled {
   if (_startDay == null) return false;
-  
+
   final now = DateTime.now();
   final difference = now.difference(_startDay!).inDays;
   return difference >= days; // Сравнение с настроенным количеством дней
@@ -199,10 +191,6 @@ bool get isTimeEnabled {
 - Выполняется HTTP-запрос по настроенной ссылке
 - При успешном ответе (200) - переход на FeatureView
 - При ошибке - переход на MainScreen
-
-### Сценарий 3: Функция отключена
-- Независимо от времени использования
-- Всегда переход на MainScreen
 
 ## Отладка и мониторинг
 

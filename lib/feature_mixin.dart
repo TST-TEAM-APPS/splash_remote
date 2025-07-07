@@ -17,5 +17,4 @@ mixin ConfigMixin {
   }
 
   String get targetData => _configManager.configData;
-  bool get isEnabled => !_configManager.isDisabled;
 }
