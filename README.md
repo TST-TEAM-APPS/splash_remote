@@ -1,5 +1,29 @@
 # Splash Screen с временной логикой и HTTP-проверкой
 
+## ⚠️ TODO - Необходимые изменения для интеграции
+
+### FEATURE VIEW
+```dart
+final prefs = await SharedPreferences.getInstance(); //TODO переделать под вашу конфигурацию
+```
+
+### SPLASH VIEW
+```dart
+void _navigateToMainScreen() {
+  if (mounted) {
+    Navigator.pushReplacementNamed(context, '/main'); //TODO ваша реализация
+  }
+}
+
+void _navigateToFeatureView() {
+  if (mounted) {
+    Navigator.pushReplacementNamed(context, '/feature'); //TODO ваша реализация
+  }
+}
+```
+
+---
+
 ## Обзор
 
 Данный функционал реализует splash screen с проверкой временного интервала и HTTP-запросом для условной навигации пользователя. Система определяет, на какой экран направить пользователя в зависимости от времени использования приложения и доступности удаленного ресурса.
@@ -78,7 +102,7 @@ class ConfigManager {
 
   // 🔗 НАСТРОЙКА ССЫЛКИ
   String get configData => 'https://your-api-endpoint.com/check';
-
+  
   // ⏰ НАСТРОЙКА КОЛИЧЕСТВА ДНЕЙ
   int get waitingDays => 7;
 }
@@ -130,7 +154,7 @@ class MyApp extends StatelessWidget {
 class ConfigManager {
   // 🔗 Изменить ссылку для HTTP-запроса
   String get configData => 'https://your-domain.com/api/check';
-
+  
   // ⏰ Изменить количество дней ожидания
   int get waitingDays => 3; // Например, 3 дня вместо 7
 }
@@ -141,8 +165,8 @@ class ConfigManager {
 ```dart
 // splash_screen.dart - метод _checkFeatureAvailability()
 final response = await http.get(
-Uri.parse(link),
-headers: {'Content-Type': 'application/json'},
+  Uri.parse(link),
+  headers: {'Content-Type': 'application/json'},
 ).timeout(const Duration(seconds: 15)); // 🕐 Изменить таймаут
 ```
 
@@ -159,7 +183,7 @@ final response = await http.get(Uri.parse(link));
 
 // Сохранение для FeatureView
 if (response.statusCode == 200) {
-saveLastVisitedUrl(link); // Сохраняется в SharedPreferences
+  saveLastVisitedUrl(link); // Сохраняется в SharedPreferences
 }
 ```
 
