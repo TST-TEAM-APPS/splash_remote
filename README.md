@@ -26,9 +26,6 @@ final prefs = await SharedPreferences.getInstance(); //TODO переделать
       ),
     );
   }
-  if (mounted) {
-    Navigator.pushReplacementNamed(context, '/main'); //TODO ваша реализация
-  }
 }
 
 void _navigateToFeatureView() {

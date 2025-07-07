@@ -104,9 +104,6 @@ class _SplashScreenState extends State<SplashScreen> with ConfigMixin {
         ),
       );
     }
-    if (mounted) {
-      Navigator.pushReplacementNamed(context, '/main'); //TODO ваша реализация
-    }
   }
 
   void _navigateToFeatureView() {
