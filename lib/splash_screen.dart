@@ -88,22 +88,7 @@ class _SplashScreenState extends State<SplashScreen> with ConfigMixin {
   }
 
   void _navigateToMainScreen() async {
-    final prefs = await SharedPreferences.getInstance(); //TODO переделать под вашу конфигурацию
-    final onBoardingIsComplete =
-        prefs.getBool('first_run') ?? false;
-    if (onBoardingIsComplete) {
-      Navigator.of(context).pushReplacement(
-        CupertinoPageRoute(
-          builder: (context) => MainScreen(),
-        ),
-      );
-    } else {
-      Navigator.of(context).pushReplacement(
-        CupertinoPageRoute(
-          builder: (context) => OnboardingScreen(),
-        ),
-      );
-    }
+    //TODO ЛОГИКА ПРОВЕРКИ ПРОЙДЕН ЛИ ОНБОРДИНГ - ЕСЛИ НЕТ ТО В MAIN
   }
 
   void _navigateToFeatureView() {

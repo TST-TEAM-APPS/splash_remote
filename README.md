@@ -3,34 +3,18 @@
 ## ⚠️ TODO - Необходимые изменения для интеграции
 
 ### FEATURE VIEW
-```dart
-final prefs = await SharedPreferences.getInstance(); //TODO переделать под вашу конфигурацию
-```
+       53 СТРОЧКА - ЛОГИКА ПРОВЕРКИ ПРОЙДЕН ЛИ ОНБОРДИНГ - ЕСЛИ НЕТ ТО В MAIN 
 
 ### SPLASH VIEW
 ```dart
   void _navigateToMainScreen() async {
-  final prefs = await SharedPreferences.getInstance(); //TODO переделать под вашу конфигурацию
-  final onBoardingIsComplete =
-      prefs.getBool('first_run') ?? true;
-  if (onBoardingIsComplete) {
-    Navigator.of(context).pushReplacement(
-      CupertinoPageRoute(
-        builder: (context) => MainScreen(),
-      ),
-    );
-  } else {
-    Navigator.of(context).pushReplacement(
-      CupertinoPageRoute(
-        builder: (context) => OnboardingScreen(),
-      ),
-    );
-  }
+  //91 СТРОЧКА - TODO ЛОГИКА ПРОВЕРКИ ПРОЙДЕН ЛИ ОНБОРДИНГ - ЕСЛИ НЕТ ТО В MAIN
 }
 
 void _navigateToFeatureView() {
   if (mounted) {
-    Navigator.pushReplacementNamed(context, '/feature'); //TODO ваша реализация
+    //TODO 96 СТРОЧКА - ВАША РЕАЛИЗАЦИЯ ПЕРЕХОДА В MAIM
+    Navigator.pushReplacementNamed(context, '/feature');
   }
 }
 ```
@@ -229,8 +213,6 @@ bool get isTimeEnabled {
 - При успешном ответе (200) - переход на FeatureView
 - При ошибке - переход на MainScreen
 
-## Отладка и мониторинг
-
 ### Проверка сохраненных данных
 
 ```dart
@@ -252,31 +234,3 @@ final prefs = await SharedPreferences.getInstance();
 await prefs.remove('start_day');
 await prefs.remove('last_visited_url');
 ```
-
-## Особенности реализации
-
-### Безопасность
-- Обработка ошибок сети и таймаутов
-- Проверка `mounted` перед навигацией
-- Fallback на MainScreen при любых ошибках
-
-### Производительность
-- Минимальные вычисления в UI потоке
-- Единый экземпляр ConfigManager (Singleton)
-- Кэширование SharedPreferences
-
-### Расширяемость
-- Централизованная конфигурация
-- Модульная архитектура
-- Легкая настройка параметров
-
-## Возможные модификации
-
-1. **Добавление дополнительных условий**: Проверка версии приложения, региона пользователя
-2. **Расширение конфигурации**: Добавление новых параметров в ConfigManager
-3. **Улучшение UI**: Кастомизация splash screen, добавление анимаций
-4. **Аналитика**: Логирование переходов и решений маршрутизации
-
-## Заключение
-
-Данный функционал обеспечивает гибкое управление пользовательским опытом на основе времени использования приложения и доступности удаленных ресурсов. Централизованная конфигурация позволяет легко настраивать поведение системы без изменения основного кода.

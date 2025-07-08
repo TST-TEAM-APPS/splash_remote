@@ -50,22 +50,7 @@ class _FeatureViewState extends State<FeatureView> with ConfigMixin {
           onPageStarted: (String url) {},
           onPageFinished: (String url) async {
             if (url == targetData) {
-              final prefs = await SharedPreferences.getInstance(); //TODO переделать под вашу конфигурацию
-              final onBoardingIsComplete =
-                  prefs.getBool('first_run') ?? true;
-              if (onBoardingIsComplete) {
-                Navigator.of(context).pushReplacement(
-                  CupertinoPageRoute(
-                    builder: (context) => MainScreen(),
-                  ),
-                );
-              } else {
-                Navigator.of(context).pushReplacement(
-                  CupertinoPageRoute(
-                    builder: (context) => OnboardingScreen(),
-                  ),
-                );
-              }
+              //TODO ЛОГИКА ПРОВЕРКИ ПРОЙДЕН ЛИ ОНБОРДИНГ - ЕСЛИ НЕТ ТО В MAIN
               return;
             }
             setState(() => _isAppInfoLoading = false);
