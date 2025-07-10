@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:splash_navigator/feature_data.dart';
-import 'package:splash_navigator/main.dart';
-import 'package:splash_navigator/onboarding_screen.dart';
+import 'package:splash_navigator/feature_mixin.dart';
 import 'package:splash_navigator/preferences_service.dart';
-import 'feature_mixin.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -16,8 +14,8 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> with ConfigMixin {
-  DateTime? _startDay;
-  static const String _startDayKey = 'start_day';
+  // Получаем вшитую фиксированную дату из конфига
+  DateTime get _startDay => ConfigManager.instance.startDate;
 
   @override
   void initState() {
@@ -30,22 +28,13 @@ class _SplashScreenState extends State<SplashScreen> with ConfigMixin {
   int get days => ConfigManager.instance.waitingDays;
 
   bool get isEnabled {
-    if (_startDay == null) return false;
-
     final now = DateTime.now();
-    final difference = now.difference(_startDay!).inDays;
+    final difference = now.difference(_startDay).inDays;
     return difference >= days;
   }
 
   Future<void> _initializeAndNavigate() async {
     await AppStorage.instance.initialize();
-
-    await _loadStartDay();
-
-    if (_startDay == null) {
-      await _saveStartDay();
-    }
-
     if (!isEnabled) {
       _navigateToMainScreen();
       return;
@@ -54,32 +43,14 @@ class _SplashScreenState extends State<SplashScreen> with ConfigMixin {
     await _checkFeatureAvailability();
   }
 
-  Future<void> _loadStartDay() async {
-    final prefs = await SharedPreferences.getInstance();
-    final startDayString = prefs.getString(_startDayKey);
-
-    if (startDayString != null) {
-      _startDay = DateTime.parse(startDayString);
-    }
-  }
-
-  Future<void> _saveStartDay() async {
-    final prefs = await SharedPreferences.getInstance();
-    _startDay = DateTime.now();
-    await prefs.setString(_startDayKey, _startDay!.toIso8601String());
-  }
-
   Future<void> _checkFeatureAvailability() async {
     try {
-      final response = await http.get(
-        Uri.parse(link),
-        headers: {'Content-Type': 'application/json'},
-      ).timeout(const Duration(seconds: 15));
-
+      final response = await http.get(Uri.parse(link), headers: {
+        'Content-Type': 'application/json'
+      }).timeout(const Duration(seconds: 15));
       if (response.statusCode == 200) {
         _navigateToFeatureView();
       } else {
-
         _navigateToMainScreen();
       }
     } catch (e) {
@@ -88,35 +59,27 @@ class _SplashScreenState extends State<SplashScreen> with ConfigMixin {
   }
 
   void _navigateToMainScreen() async {
-    //TODO ЛОГИКА ПРОВЕРКИ ПРОЙДЕН ЛИ ОНБОРДИНГ - ЕСЛИ НЕТ ТО В MAIN
+    //TODO check onboarding and navigate to main or onb
   }
 
   void _navigateToFeatureView() {
     if (mounted) {
-      Navigator.pushReplacementNamed(context, '/feature'); //TODO ваша реализация
+     //TODO navigate to feature view
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.flutter_dash,
-              size: 100,
-              color: Colors.blue,
-            ),
-            const SizedBox(height: 20),
-            CircularProgressIndicator(
-              color: Colors.blue,
-            ),
+            CircularProgressIndicator(color: Colors.blue),
             const SizedBox(height: 20),
             Text(
-              'Загрузка...',
+              'Loading...',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
